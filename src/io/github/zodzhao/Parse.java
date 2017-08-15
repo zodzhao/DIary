@@ -1,5 +1,6 @@
 package io.github.zodzhao;
 
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,7 +33,7 @@ public class Parse {
      *
      * @return String[]
      */
-    String parse(String query) {
+    String parse(String query) throws IOException, InterruptedException {
 
         Matcher m;
         Eval e = new Eval();

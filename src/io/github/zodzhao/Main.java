@@ -5,16 +5,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Main {
-    private static final String EXIT   = "exit";
+    private static final String EXIT = "exit";
     private static final String PROMPT = "> ";
 
-    public static void main(String[] args) throws IOException {
-//        System.out.println("ok");
+    public static void main(String[] args) throws IOException, InterruptedException {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         System.out.print(PROMPT);
 
+
         String line = "";
-            while ((line = in.readLine()) != null) {
+        while ((line = in.readLine()) != null) {
             if (EXIT.equals(line)) {
                 break;
             }
