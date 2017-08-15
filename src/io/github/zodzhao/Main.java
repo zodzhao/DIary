@@ -20,7 +20,7 @@ public class Main {
             }
 
             if (!line.trim().isEmpty()) {
-                String result = Eval.transact(line);
+                String result = Eval.eval(line);
                 if (result.length() > 0) {
                     System.out.println(result);
                 }
