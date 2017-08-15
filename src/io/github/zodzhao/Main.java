@@ -9,9 +9,12 @@ public class Main {
     private static final String PROMPT = "> ";
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-        System.out.print(PROMPT);
 
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+
+
+        System.out.print(PROMPT);
+        Eval e = new Eval(in);
 
         String line = "";
         while ((line = in.readLine()) != null) {
@@ -20,7 +23,7 @@ public class Main {
             }
 
             if (!line.trim().isEmpty()) {
-                String result = Eval.eval(line);
+                String result = e.eval(line);
                 if (result.length() > 0) {
                     System.out.println(result);
                 }

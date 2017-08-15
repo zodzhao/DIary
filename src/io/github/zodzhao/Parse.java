@@ -1,5 +1,6 @@
 package io.github.zodzhao;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,16 +34,23 @@ public class Parse {
      *
      * @return String[]
      */
-    String parse(String query) throws IOException, InterruptedException {
+    String parse(String query, Eval e, BufferedReader in) throws IOException, InterruptedException {
 
         Matcher m;
-        Eval e = new Eval();
 
         if ((m = WRITE_CMD.matcher(query)).matches()) {
             System.out.println(m.group(1));
             return e.write(m.group(1));
+        } else if ((m = READ_CMD.matcher(query)).matches()) {
+            System.out.println(m.group(1));
+            return e.read(m.group(1));
+        } else if ((m = PASSWORD_CMD.matcher(query)).matches()) {
+            return e.setPassword(in);
+        } else if ((m = WRITE_CMD.matcher(query)).matches()) {
+            System.out.println(m.group(1));
+            return e.write(m.group(1));
+        } else {
+            return "malformed command";
         }
-
-        return null;
     }
 }
