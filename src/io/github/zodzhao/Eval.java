@@ -28,7 +28,6 @@ class Eval {
         //Generate keys for rsa
         File publicKey1 = new File(PASSPATH + "KeyPair/publicKey");
         File privateKey1 = new File(PASSPATH + "KeyPair/privateKey");
-        System.out.println((publicKey1.exists() && privateKey1.exists()));
         PASSPATH = "res/.secure/";
 
         if (!(publicKey1.exists() && privateKey1.exists())) {
@@ -44,13 +43,12 @@ class Eval {
                 System.err.println(e.getMessage());
             }
         }
-        System.out.println((publicKey1.exists() && privateKey1.exists()));
 
         u = new Utility();
 
 
         // Prompt
-        System.out.println("INITIATING...");
+        System.out.println("INITIATING...version 0.1");
 
 
         //SET OR GET PASSWORD

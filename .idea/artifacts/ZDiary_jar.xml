@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ZDiary:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ZDiary_jar</output-path>
+    <root id="archive" name="ZDiary.jar">
+      <element id="module-output" name="ZDiary" />
+    </root>
+  </artifact>
+</component>
