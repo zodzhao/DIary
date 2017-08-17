@@ -72,7 +72,6 @@ class Eval {
      * @return
      */
     String write(String filename) throws IOException, InterruptedException {
-        // todo: figure out how to update the folder immediately after writing
         PrintWriter writer = new PrintWriter(FILEPATH + filename, "UTF-8");
         String EXIT = "finish";
         String PROMPT = "-";
