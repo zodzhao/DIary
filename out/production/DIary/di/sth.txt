@@ -1,5 +1,0 @@
-d1
-hello my fella 
-hello world
-end
-finishi

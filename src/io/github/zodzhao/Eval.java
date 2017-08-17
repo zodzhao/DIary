@@ -131,13 +131,18 @@ class Eval {
     }
 
     String delete(String filename) {
-        //TODO: IMPLEMENT
-        return "";
+        try {
+            File file = new File(FILEPATH + filename);
+            file.delete();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return filename + " Deleted!";
     }
 
     String read(String filename) {
 
-        File file = new File(FILEPATH + filename );
+        File file = new File(FILEPATH + filename);
 
         try {
             Scanner sc = new Scanner(file);
