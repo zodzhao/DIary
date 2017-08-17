@@ -1,6 +1,5 @@
 package io.github.zodzhao;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,13 +12,11 @@ public class Parse {
     private final String REST = "\\s*(.*)\\s*";
 
     // Stage 1 syntax, contains the command name.
-    private final Pattern PASSWORD_CMD = Pattern.compile("set password " + REST),
+    private final Pattern PASSWORD_CMD = Pattern.compile("set password" + REST),
             WRITE_CMD = Pattern.compile("write " + REST),
             READ_CMD = Pattern.compile("read " + REST),
-            MOD_CMD = Pattern.compile("mod " + REST);
-
-//            PRINT_CMD = Pattern.compile("print " + REST),
-//            SELECT_CMD = Pattern.compile("select " + REST);
+            DELETE_CMD = Pattern.compile("delete " + REST),
+            VIEW_CMD = Pattern.compile("view" + REST);
 
 
     /**
@@ -47,8 +44,14 @@ public class Parse {
         } else if ((m = WRITE_CMD.matcher(query)).matches()) {
             System.out.println(m.group(1));
             return e.write(m.group(1));
+        } else if ((m = DELETE_CMD.matcher(query)).matches()) {
+            System.out.println(m.group(1));
+            return e.delete(m.group(1));
+        } else if ((m = VIEW_CMD.matcher(query)).matches()) {
+            System.out.println(m.group(1));
+            return e.view();
         } else {
-            return "malformed command";
+            return "malformed command!";
         }
     }
 }
