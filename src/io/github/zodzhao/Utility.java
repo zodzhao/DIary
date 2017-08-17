@@ -1,21 +1,36 @@
 package io.github.zodzhao;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+
 /**
  * Created by jiazhengzhao on 8/16/17.
  */
 public class Utility {
-    private final int p1 = 99998869;
-    private final int p2 = 99999989;
-    private final int p3 = 179425319;
+    AsymmetricCryptography ac = new AsymmetricCryptography();
+    PrivateKey privateKey = ac.getPrivate("res/.secure/KeyPair/privateKey");
+    PublicKey publicKey = ac.getPublic("res/.secure/KeyPair/publicKey");
 
-
-    static String encrypt(String line) {
-        //TODO ADD ENCRYPTION METHOD
-        return line;
+    public Utility() throws Exception {
     }
 
-    static String decrypt(String encryptedLine) {
+     String encrypt(String line) throws NoSuchPaddingException, BadPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, UnsupportedEncodingException, InvalidKeyException {
+        //TODO ADD ENCRYPTION METHOD
+        String encrypted_msg = ac.encryptText(line, privateKey);
+
+        return encrypted_msg;
+    }
+
+     String decrypt(String encryptedLine) throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException, UnsupportedEncodingException {
         //TODO: ADD DECRYPTION METHOD
-        return encryptedLine;
+         String decrypted_msg = ac.decryptText(encryptedLine, publicKey);
+
+         return decrypted_msg;
     }
 }

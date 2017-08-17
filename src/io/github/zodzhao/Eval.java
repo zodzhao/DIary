@@ -1,7 +1,13 @@
 package io.github.zodzhao;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
 import java.io.*;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.util.Scanner;
+
 
 /**
  * Created by jiazhengzhao on 8/15/17.
@@ -12,21 +18,48 @@ class Eval {
     private int password;
     private BufferedReader in;
     private String PASSPATH;
+    private Utility u;
 
-    Eval(BufferedReader in) throws IOException {
+    Eval(BufferedReader in) throws Exception {
         //init
         PASSPATH = "res/.secure/";
-        ObjectReader or = new ObjectReader(PASSPATH + "passobj");
-        password = (int) or.readObject();
         this.in = in;
+
+        //Generate keys for rsa
+        File publicKey1 = new File(PASSPATH + "KeyPair/publicKey");
+        File privateKey1 = new File(PASSPATH + "KeyPair/privateKey");
+        System.out.println((publicKey1.exists() && privateKey1.exists()));
+        PASSPATH = "res/.secure/";
+
+        if (!(publicKey1.exists() && privateKey1.exists())) {
+            GenerateKeys gk;
+            try {
+                gk = new GenerateKeys(1024);
+                gk.createKeys();
+                gk.writeToFile(PASSPATH + "KeyPair/publicKey", gk.getPublicKey().getEncoded());
+                gk.writeToFile(PASSPATH + "KeyPair/privateKey", gk.getPrivateKey().getEncoded());
+            } catch (NoSuchAlgorithmException | NoSuchProviderException e) {
+                System.err.println(e.getMessage());
+            } catch (IOException e) {
+                System.err.println(e.getMessage());
+            }
+        }
+        System.out.println((publicKey1.exists() && privateKey1.exists()));
+
+        u = new Utility();
+
 
         // Prompt
         System.out.println("INITIATING...");
 
-        //see if password already exist
-        //TODO: MAYBE MORE FRIENDLY INTERFACE
+
+        //SET OR GET PASSWORD
         File varTmpDir = new File(PASSPATH + "passobj");
         if (varTmpDir.exists()) {
+
+            ObjectReader or = new ObjectReader(PASSPATH + "passobj");
+            password = (int) or.readObject();
+
             // prompt input password
             String inputPassword = "randomized long string that does nto nae ahdfape kjafd";
             System.out.println("Please Enter Your Password Here:");
@@ -40,16 +73,13 @@ class Eval {
             //set password
             String password1 = "1";
             String password2 = "2";
+            System.out.println("WELCOME TO THE YOUR DIARY");
             while (!password1.equals(password2)) {
                 System.out.println("Please Enter Your Password Here:");
                 password1 = in.readLine();
-
-                System.out.println("Please Confirm Your Password:");
+                System.out.println("Please Enter Your Confirm Your Password:");
                 password2 = in.readLine();
             }
-
-            //TODO: NOT SECURE; HASH IT
-
             ObjectWriter ow = new ObjectWriter(PASSPATH + "passobj");
             ow.writeObject(password1.hashCode());
 
@@ -57,9 +87,13 @@ class Eval {
             System.out.print(">");
         }
 
+
+        // RSA ENCODING FILE
+
+
     }
 
-    String eval(String line) throws IOException, InterruptedException {
+    String eval(String line) throws Exception {
         Parse p = new Parse();
 
         return p.parse(line, this);
@@ -71,23 +105,37 @@ class Eval {
      *
      * @return
      */
-    String write(String filename) throws IOException, InterruptedException {
-        PrintWriter writer = new PrintWriter(FILEPATH + filename, "UTF-8");
-        String EXIT = "finish";
-        String PROMPT = "-";
-        String line = "";
-        System.out.print(PROMPT);
-        while ((line = in.readLine()) != null) {
-            if (EXIT.equals(line)) {
-                break;
-            }
-            if (!line.trim().isEmpty()) {
-                writer.println(Utility.encrypt(line));
-            }
+    String write(String filename) throws Exception {
+
+        // check duplicate
+//        String workingDir = System.getProperty(FILEPATH);
+        // a File instance for the directory:
+        File workingDirFile = new File(FILEPATH);
+        // a File instance for a file in that directory:
+        File testfile = new File(workingDirFile, filename);
+        if (testfile.exists()) {
+            return "Sorry, it exists. Please come up with another name";
+        } else {
+
+            PrintWriter writer = new PrintWriter(FILEPATH + filename, "UTF-8");
+            String EXIT = "finish";
+            String PROMPT = "-";
+            String line = "";
             System.out.print(PROMPT);
+            while ((line = in.readLine()) != null) {
+                if (EXIT.equals(line)) {
+                    break;
+                }
+                if (!line.trim().isEmpty()) {
+                    writer.println(u.encrypt(line));
+                }
+                System.out.print(PROMPT);
+            }
+            writer.close();
+            return filename + " CLOSED and SAVED!";
         }
-        writer.close();
-        return filename + ".txt CLOSED and SAVED!";
+
+
     }
 
     /**
@@ -141,18 +189,22 @@ class Eval {
 
     String read(String filename) {
 
+
         File file = new File(FILEPATH + filename);
 
         try {
             Scanner sc = new Scanner(file);
             while (sc.hasNextLine()) {
                 String i = sc.nextLine();
-                System.out.println(i);
+                System.out.println(u.decrypt(i));
             }
             sc.close();
             return "";
 
         } catch (FileNotFoundException e) {
+            return "This is not the droid you are looking for.";
+        } catch (BadPaddingException | InvalidKeyException | UnsupportedEncodingException | IllegalBlockSizeException e) {
+            e.printStackTrace();
             return "This is not the droid you are looking for.";
         }
 

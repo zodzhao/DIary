@@ -1,4 +1,4 @@
-package com.mkyong.keypair;
+package io.github.zodzhao;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -50,8 +50,8 @@ public class GenerateKeys {
 		try {
 			gk = new GenerateKeys(1024);
 			gk.createKeys();
-			gk.writeToFile("KeyPair/publicKey", gk.getPublicKey().getEncoded());
-			gk.writeToFile("KeyPair/privateKey", gk.getPrivateKey().getEncoded());
+			gk.writeToFile("res/.secure/KeyPair/publicKey", gk.getPublicKey().getEncoded());
+			gk.writeToFile("res/.secure/KeyPair/privateKey", gk.getPrivateKey().getEncoded());
 		} catch (NoSuchAlgorithmException | NoSuchProviderException e) {
 			System.err.println(e.getMessage());
 		} catch (IOException e) {

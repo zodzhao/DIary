@@ -29,7 +29,7 @@ public class Parse {
      *
      * @return String[]
      */
-    String parse(String query, Eval e) throws IOException, InterruptedException {
+    String parse(String query, Eval e) throws Exception {
 
         Matcher m;
 
@@ -41,9 +41,6 @@ public class Parse {
             return e.read(m.group(1));
         } else if ((m = PASSWORD_CMD.matcher(query)).matches()) {
             return e.setPassword();
-        } else if ((m = WRITE_CMD.matcher(query)).matches()) {
-            System.out.println(m.group(1));
-            return e.write(m.group(1));
         } else if ((m = DELETE_CMD.matcher(query)).matches()) {
             System.out.println(m.group(1));
             return e.delete(m.group(1));
