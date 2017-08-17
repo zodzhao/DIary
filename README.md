@@ -1,2 +1,2 @@
-# DIary
+# ZDiary
 diary for fun
