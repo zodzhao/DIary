@@ -11,10 +11,8 @@ public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
 
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-
-
-        System.out.print(PROMPT);
         Eval e = new Eval(in);
+        System.out.print(PROMPT);
 
         String line = "";
         while ((line = in.readLine()) != null) {

@@ -10,9 +10,7 @@ import java.util.regex.Pattern;
  * Function: Parse commandline input and calls evaluation
  */
 public class Parse {
-    private final String REST = "\\s*(.*)\\s*",
-            COMMA = "\\s*,\\s*",
-            AND = "\\s+and\\s+";
+    private final String REST = "\\s*(.*)\\s*";
 
     // Stage 1 syntax, contains the command name.
     private final Pattern PASSWORD_CMD = Pattern.compile("set password " + REST),
@@ -34,7 +32,7 @@ public class Parse {
      *
      * @return String[]
      */
-    String parse(String query, Eval e, BufferedReader in) throws IOException, InterruptedException {
+    String parse(String query, Eval e) throws IOException, InterruptedException {
 
         Matcher m;
 
@@ -45,7 +43,7 @@ public class Parse {
             System.out.println(m.group(1));
             return e.read(m.group(1));
         } else if ((m = PASSWORD_CMD.matcher(query)).matches()) {
-            return e.setPassword(in);
+            return e.setPassword();
         } else if ((m = WRITE_CMD.matcher(query)).matches()) {
             System.out.println(m.group(1));
             return e.write(m.group(1));

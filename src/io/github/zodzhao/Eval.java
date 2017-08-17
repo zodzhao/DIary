@@ -1,41 +1,39 @@
 package io.github.zodzhao;
 
-import java.awt.*;
 import java.io.*;
-
-import static java.lang.System.in;
 
 /**
  * Created by jiazhengzhao on 8/15/17.
- * evaluate parsed instructions and read or write files.
+ * evaluate parsed instructions and read or write di.
  */
 public class Eval {
-    String FILEPATH = "res/files/";
-    String PASSPATH = "res/.secure/";
-    String password;
-    BufferedReader in;
+    String FILEPATH = "res/di/";
+    private BufferedReader in;
 
-    public Eval(BufferedReader in) throws IOException {
+    Eval(BufferedReader in) throws IOException {
         // Prompt
         this.in = in;
         System.out.println("INITIATING...");
 
         //see if password already exist
-        File varTmpDir = new File(PASSPATH + "passobj.txt");
+        String PASSPATH = "res/.secure/";
+        File varTmpDir = new File(PASSPATH + "passobj");
         if (varTmpDir.exists()) {
             in = new BufferedReader(new InputStreamReader(System.in));
 
-            ObjectReader or = new ObjectReader(PASSPATH + "passobj.txt");
-            String password = (String) or.readObject();
+            ObjectReader or = new ObjectReader(PASSPATH + "passobj");
+            int password = (int) or.readObject();
 
             // prompt input password
             String inputPassword = "randomized long string that does nto nae ahdfape kjafd";
 //            while (inputPassword != password){
-                System.out.println("Please Enter Your Password Here:");
-                inputPassword = in.readLine();
+            System.out.println("Please Enter Your Password Here:");
+            inputPassword = in.readLine();
 //            }
-            if (!inputPassword.equals(password)) {
+            if ((inputPassword.hashCode()) != (password)) {
                 System.exit(0);
+            } else {
+                System.out.println("UNLOCKED");
             }
 
 
@@ -53,21 +51,20 @@ public class Eval {
                 password2 = in.readLine();
             }
 
-            //TODO: WRITE PASSWORD IN OBJECT FILE;
-            System.out.println("You're All Set");
+            //TODO: NOT SECURE; HASH IT
+
+            ObjectWriter ow = new ObjectWriter(PASSPATH + "passobj");
+            ow.writeObject(password1.hashCode());
+
+            System.out.println("You're All Set :P");
             System.out.print(">");
-
-
-
-
-
         }
 
     }
 
     String eval(String line) throws IOException, InterruptedException {
         Parse p = new Parse();
-        p.parse(line, this , in);
+        p.parse(line, this);
 
         return "";
     }
@@ -78,16 +75,25 @@ public class Eval {
      * @return
      */
     String write(String filename) throws IOException, InterruptedException {
-        File a = File.createTempFile("zodthegod", "nonempty");
-        Desktop.getDesktop().edit(a);
 
-        PrintWriter writer = new PrintWriter(filename + ".txt", "UTF-8");
-        writer.println(a.getAbsoluteFile());
+        PrintWriter writer = new PrintWriter(FILEPATH + filename + ".txt", "UTF-8");
+        String EXIT = "finish";
+        String PROMPT = "-";
+        String line = "";
+        System.out.print(PROMPT);
+        while ((line = in.readLine()) != null) {
+            if (EXIT.equals(line)) break;
+            if (!line.trim().isEmpty()) {
+                writer.println(Utility.encrypt(line));
+            }
+            System.out.print(PROMPT);
+        }
         writer.close();
-        return "lol";
+
+        return null;
     }
 
-    String setPassword(BufferedReader in) {
+    String setPassword() {
         //TODO: IMPLEMENT
         return null;
     }

@@ -3,7 +3,7 @@ import java.io.Serializable;
 import java.io.ObjectOutputStream;
 import java.io.FileOutputStream;
 
-/** Utility class for writing Java objects to files. The Object must
+/** Utility class for writing Java objects to di. The Object must
  * implement the Serializable interface. */
 
 public class ObjectWriter {
