@@ -48,7 +48,7 @@ class Eval {
 
 
         // Prompt
-        System.out.println("INITIATING...version 0.1");
+        System.out.println("INITIATING...version 0.2");
 
 
         //SET OR GET PASSWORD
