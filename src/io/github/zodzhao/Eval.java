@@ -14,21 +14,19 @@ import java.util.Scanner;
  * evaluate parsed instructions and read or write di.
  */
 class Eval {
-    private String FILEPATH = "res/di/";
+    String FILEPATH = "~/.zdiary/res/di/";
+    String PASSPATH = "~/.zdiary/res/.secure/";
     private int password;
     private BufferedReader in;
-    private String PASSPATH;
     private Utility u;
 
     Eval(BufferedReader in) throws Exception {
         //init
-        PASSPATH = "res/.secure/";
         this.in = in;
 
         //Generate keys for rsa
         File publicKey1 = new File(PASSPATH + "KeyPair/publicKey");
         File privateKey1 = new File(PASSPATH + "KeyPair/privateKey");
-        PASSPATH = "res/.secure/";
 
         if (!(publicKey1.exists() && privateKey1.exists())) {
             GenerateKeys gk;
@@ -114,6 +112,9 @@ class Eval {
         if (testfile.exists()) {
             return "Sorry, it exists. Please come up with another name";
         } else {
+            File f = new File(FILEPATH + filename);
+            f.getParentFile().mkdirs();
+            f.createNewFile();
 
             PrintWriter writer = new PrintWriter(FILEPATH + filename, "UTF-8");
             String EXIT = "finish";
