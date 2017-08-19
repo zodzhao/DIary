@@ -16,7 +16,7 @@ public class Parse {
             WRITE_CMD = Pattern.compile("write " + REST),
             READ_CMD = Pattern.compile("read " + REST),
             DELETE_CMD = Pattern.compile("delete " + REST),
-            VIEW_CMD = Pattern.compile("view" + REST);
+            VIEW_CMD = Pattern.compile("ls" + REST);
 
 
     /**
