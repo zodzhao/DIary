@@ -14,15 +14,25 @@ import java.util.Scanner;
  * evaluate parsed instructions and read or write di.
  */
 class Eval {
-    String FILEPATH = "~/.zdiary/res/di/";
-    String PASSPATH = "~/.zdiary/res/.secure/";
+    static String homeDir = System.getProperty("user.home");
+
+    String FILEPATH = homeDir + "/.zdiary/res/di/";
+    String PASSPATH = homeDir + "/.zdiary/res/.secure/";
     private int password;
     private BufferedReader in;
     private Utility u;
+    Console console = System.console();
 
     Eval(BufferedReader in) throws Exception {
         //init
         this.in = in;
+
+        //create path
+        File f = new File(FILEPATH);
+        f.mkdirs();
+        File pf = new File(PASSPATH);
+        pf.mkdirs();
+
 
         //Generate keys for rsa
         File publicKey1 = new File(PASSPATH + "KeyPair/publicKey");
@@ -48,7 +58,10 @@ class Eval {
         // Prompt
         System.out.println("INITIATING...version 0.2");
 
-
+        if (console == null) {
+            System.out.println("Couldn't get Console instance");
+            System.exit(0);
+        }
         //SET OR GET PASSWORD
         File varTmpDir = new File(PASSPATH + "passobj");
         if (varTmpDir.exists()) {
@@ -57,9 +70,9 @@ class Eval {
             password = (int) or.readObject();
 
             // prompt input password
-            String inputPassword = "randomized long string that does nto nae ahdfape kjafd";
-            System.out.println("Please Enter Your Password Here:");
-            inputPassword = in.readLine();
+            char passwordArray[] = console.readPassword("Enter your password: ");
+            String inputPassword = new String(passwordArray);
+            //check if same;
             if ((inputPassword.hashCode()) != (password)) {
                 System.exit(0);
             } else {
@@ -82,10 +95,6 @@ class Eval {
             System.out.println("You're All Set :P");
             System.out.print(">");
         }
-
-
-        // RSA ENCODING FILE
-
 
     }
 
@@ -147,10 +156,10 @@ class Eval {
         // prompt input old password
         System.out.println("Hey you wanna change your password huh?");
         System.out.println("First, please enter the current password");
-        System.out.print("Old password: ");
-
         // get the line
-        String usrInputOld = in.readLine();
+        char passwordArray[] = console.readPassword("Enter your old password: ");
+        String usrInputOld = new String(passwordArray);
+
         // compare
         if (usrInputOld.hashCode() == password) {
             System.out.println("Yay you can reset now");
@@ -161,7 +170,6 @@ class Eval {
             while (!password1.equals(password2)) {
                 System.out.println("Please Enter Your Password Here:");
                 password1 = in.readLine();
-
                 System.out.println("Please Confirm Your Password:");
                 password2 = in.readLine();
             }
@@ -170,7 +178,6 @@ class Eval {
             ObjectWriter ow = new ObjectWriter(PASSPATH + "passobj");
             ow.writeObject(password1.hashCode());
             return "Your password has been reset, please don't forget it";
-
         } else {
             return "Uh Oh Wrong password! Bye you idiot";
         }

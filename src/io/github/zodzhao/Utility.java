@@ -13,8 +13,7 @@ import java.security.PublicKey;
  * Created by jiazhengzhao on 8/16/17.
  */
 public class Utility {
-    String PASSPATH = "~/.zdiary/res/.secure/";
-    String FILEPATH = "~/.zdiary/res/di/";
+    String PASSPATH = Eval.homeDir + "/.zdiary/res/.secure/";
     AsymmetricCryptography ac = new AsymmetricCryptography();
     PrivateKey privateKey = ac.getPrivate(PASSPATH + "KeyPair/privateKey");
     PublicKey publicKey = ac.getPublic(PASSPATH + "KeyPair/publicKey");
